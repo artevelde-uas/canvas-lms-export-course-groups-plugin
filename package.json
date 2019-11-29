@@ -1,0 +1,18 @@
+{
+  "name": "@artevelde-uas/canvas-lms-export-course-groups-plugin",
+  "version": "0.1.0",
+  "description": "Plug-in for the Canvas LMS theme app that adds a menu item to export course groups as Excel",
+  "keywords": [
+    "Canvas LMS"
+  ],
+  "license": "MIT",
+  "author": "Renaat De Muynck <renaat.demuynck@arteveldehs.be>",
+  "repository": "https://github.com/artevelde-uas/canvas-lms-export-course-groups-plugin",
+  "module": "src/index.js",
+  "files": [
+    "src/index.js"
+  ],
+  "peerDependencies": {
+    "@ahsdile/canvas-lms-app": "^0.24.0"
+  }
+}
