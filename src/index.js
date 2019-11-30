@@ -39,6 +39,7 @@ export default function ({ router, addReadyListener, api }) {
             anchor.href = url;
             anchor.download = '';
             anchor.click();
+            URL.revokeObjectURL(file);
         });
     });
 
