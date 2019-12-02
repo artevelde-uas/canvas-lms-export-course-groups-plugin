@@ -1,14 +1,4 @@
 
-function paramsHashHack(params) {
-    var hashMatch = window.location.hash.match(/^#tab-(\d+)/);
-
-    if (hashMatch !== null) {
-        params.groupCategoryId = hashMatch[1];
-    }
-
-    return params;
-}
-
 export default function ({ router, addReadyListener, api }) {
 
     async function getGroupCategory(groupCategoryId) {
@@ -27,9 +17,6 @@ export default function ({ router, addReadyListener, api }) {
     }
 
     router.addListener('courses.users.groups', function (params) {
-        // Hack to get group id from hash
-        params = paramsHashHack(params);
-
         addReadyListener('#group_categories_tabs', tabs => {
             tabs.addEventListener('mousedown', event => {
                 var button = event.target.closest('.group-category-actions a.al-trigger');
