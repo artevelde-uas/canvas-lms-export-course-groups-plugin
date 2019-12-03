@@ -3,6 +3,23 @@ import { downloadFile } from "./util";
 import translations from './i18n.json';
 
 
+function generateGroupCategoryCSV(groupCategory) {
+    var rows = [];
+
+    rows.push('Group,User');
+
+    for (let group of groupCategory.groups) {
+        for (let user of group.users) {
+            var row = [group.name, user.name].join(',');
+
+            rows.push(row);
+        }
+    }
+
+    return rows.join('\n');
+}
+
+
 export default function ({ router, addReadyListener, api, i18n: { translate: __, setTranslations } }) {
     setTranslations(translations);
 
@@ -46,9 +63,9 @@ export default function ({ router, addReadyListener, api, i18n: { translate: __,
                     exportLink = menu.lastElementChild;
                     exportLink.addEventListener('click', () => {
                         getGroupCategory(groupCategoryId).then(groupCategory => {
-                            var data = [JSON.stringify(groupCategory, null, 2)];
-                            var fileName = encodeURIComponent(`${groupCategory.name}.json`);
-                            var file = new File(data, fileName, { type: 'application/json' });
+                            var data = [generateGroupCategoryCSV(groupCategory)];
+                            var fileName = encodeURIComponent(`${groupCategory.name}.csv`);
+                            var file = new File(data, fileName, { type: 'text/csv' });
 
                             downloadFile(file, fileName);
                         });
