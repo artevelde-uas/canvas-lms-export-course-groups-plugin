@@ -18,7 +18,7 @@ export default function ({ router, addReadyListener, api }) {
         return groupCategory;
     }
 
-    router.addListener('courses.users.groups', function (params) {
+    router.addListener('courses.users.groups', function () {
         addReadyListener('#group_categories_tabs', tabs => {
             tabs.addEventListener('mousedown', event => {
                 var button = event.target.closest('.group-category-actions a.al-trigger');
@@ -39,7 +39,7 @@ export default function ({ router, addReadyListener, api }) {
                     `);
 
                     exportLink = menu.lastElementChild;
-                    exportLink.addEventListener('click', event => {
+                    exportLink.addEventListener('click', () => {
                         getGroupCategory(groupCategoryId).then(groupCategory => {
                             var data = JSON.stringify(groupCategory, null, 2);
                             var fileName = `${groupCategory.name}.json`;
