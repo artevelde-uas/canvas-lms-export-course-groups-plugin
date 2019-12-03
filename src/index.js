@@ -1,7 +1,10 @@
 import { downloadFile } from "./util";
 
+import translations from './i18n.json';
 
-export default function ({ router, addReadyListener, api }) {
+
+export default function ({ router, addReadyListener, api, i18n: { translate: __, setTranslations } }) {
+    setTranslations(translations);
 
     async function getGroupCategory(groupCategoryId) {
         var [groupCategory, groups] = await Promise.all([
@@ -32,7 +35,7 @@ export default function ({ router, addReadyListener, api }) {
                     menu.insertAdjacentHTML('beforeend', `
                         <li class="ui-menu-item" role="presentation">
                             <a href="#" class="icon-export export-category ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
-                                Export as CSV
+                                ${__('export_as_csv')}
                             </a>
                         </li>
                     `);
