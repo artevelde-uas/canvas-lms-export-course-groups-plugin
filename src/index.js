@@ -27,8 +27,7 @@ export default function ({ router, addReadyListener, api }) {
 
                 let menu = button.nextElementSibling;
                 let exportLink = menu.querySelector('a.export-category');
-                let tabAnchor = tabs.querySelector('ul.ui-tabs-nav > li.ui-tabs-active > a.ui-tabs-anchor.group-category-tab-link');
-                let groupCategoryId = tabAnchor.href.match(/tab-(\d+)$/)[1];
+
                 if (exportLink === null) {
                     menu.insertAdjacentHTML('beforeend', `
                         <li class="ui-menu-item" role="presentation">
@@ -37,6 +36,9 @@ export default function ({ router, addReadyListener, api }) {
                             </a>
                         </li>
                     `);
+
+                    let tabAnchor = tabs.querySelector('ul.ui-tabs-nav > li.ui-tabs-active > a.ui-tabs-anchor.group-category-tab-link');
+                    let groupCategoryId = tabAnchor.href.match(/tab-(\d+)$/)[1];
 
                     exportLink = menu.lastElementChild;
                     exportLink.addEventListener('click', () => {
