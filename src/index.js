@@ -46,10 +46,11 @@ export default function ({ router, addReadyListener, api, i18n: { translate: __,
                     exportLink = menu.lastElementChild;
                     exportLink.addEventListener('click', () => {
                         getGroupCategory(groupCategoryId).then(groupCategory => {
-                            var data = JSON.stringify(groupCategory, null, 2);
-                            var fileName = `${groupCategory.name}.json`;
+                            var data = [JSON.stringify(groupCategory, null, 2)];
+                            var fileName = encodeURIComponent(`${groupCategory.name}.json`);
+                            var file = new File(data, fileName, { type: 'application/json' });
 
-                            downloadFile(data, fileName);
+                            downloadFile(file, fileName);
                         });
                     });
                 }
