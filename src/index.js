@@ -1,3 +1,5 @@
+import { downloadFile } from "./util";
+
 
 export default function ({ router, addReadyListener, api }) {
 
@@ -39,16 +41,10 @@ export default function ({ router, addReadyListener, api }) {
                     exportLink = menu.lastElementChild;
                     exportLink.addEventListener('click', event => {
                         getGroupCategory(groupCategoryId).then(groupCategory => {
-                            var data = [JSON.stringify(groupCategory, null, 2)];
-                            var fileName = encodeURIComponent(`${groupCategory.name}.json`);
-                            var file = new File(data, fileName, { type: 'application/json' });
-                            var url = URL.createObjectURL(file);
-                            var anchor = document.createElement('a');
+                            var data = JSON.stringify(groupCategory, null, 2);
+                            var fileName = `${groupCategory.name}.json`;
 
-                            anchor.href = url;
-                            anchor.download = '';
-                            anchor.click();
-                            URL.revokeObjectURL(file);
+                            downloadFile(data, fileName);
                         });
                     });
                 }
