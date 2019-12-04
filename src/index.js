@@ -1,3 +1,4 @@
+import xlsx from 'xlsx';
 import { downloadFile } from "./util";
 
 import translations from './i18n.json';

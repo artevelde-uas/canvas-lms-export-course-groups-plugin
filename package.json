@@ -16,5 +16,8 @@
   ],
   "peerDependencies": {
     "@ahsdile/canvas-lms-app": "^0.24.0"
+  },
+  "dependencies": {
+    "xlsx": "^0.15.3"
   }
 }
