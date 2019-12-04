@@ -1,24 +1,7 @@
 import xlsx from 'xlsx';
-import { downloadFile } from "./util";
 
 import translations from './i18n.json';
 
-
-function generateGroupCategoryCSV(groupCategory) {
-    var rows = [];
-
-    rows.push('Group,User');
-
-    for (let group of groupCategory.groups) {
-        for (let user of group.users) {
-            var row = [group.name, user.name].join(',');
-
-            rows.push(row);
-        }
-    }
-
-    return rows.join('\n');
-}
 
 
 export default function ({ router, addReadyListener, api, i18n: { translate: __, setTranslations } }) {
