@@ -1,4 +1,5 @@
-import xlsx from 'xlsx';
+import { writeFile as writeWorkbookToFile } from 'xlsx';
+import { utils as WorkbookUtils } from 'xlsx';
 
 import translations from './i18n.json';
 
@@ -47,20 +48,20 @@ export default function ({ router, addReadyListener, api, i18n: { translate: __,
                     exportLink = menu.lastElementChild;
                     exportLink.addEventListener('click', () => {
                         getGroupCategory(groupCategoryId).then(groupCategory => {
-                            var workBook = xlsx.utils.book_new();
+                            var workBook = WorkbookUtils.book_new();
                             var fileName = `${groupCategory.name}.xlsx`;
 
                             for (let group of groupCategory.groups) {
                                 let data = group.users.map(user => [user.name]);
-                                let workSheet = xlsx.utils.aoa_to_sheet(data);
+                                let workSheet = WorkbookUtils.aoa_to_sheet(data);
                                 let sheetName = group.name;
 
                                 // Add worksheet to workbook
-                                xlsx.utils.book_append_sheet(workBook, workSheet, sheetName);
+                                WorkbookUtils.book_append_sheet(workBook, workSheet, sheetName);
                             }
 
                             // Write workbook to file
-                            xlsx.writeFile(workBook, fileName);
+                            writeWorkbookToFile(workBook, fileName);
                         });
                     });
                 }
