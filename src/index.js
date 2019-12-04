@@ -47,7 +47,7 @@ export default function ({ router, addReadyListener, api, i18n: { translate: __,
                     menu.insertAdjacentHTML('beforeend', `
                         <li class="ui-menu-item" role="presentation">
                             <a href="#" class="icon-export export-category ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
-                                ${__('export_as_csv')}
+                                ${__('export_as_excel')}
                             </a>
                         </li>
                     `);

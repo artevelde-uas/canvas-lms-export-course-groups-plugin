@@ -1,8 +1,8 @@
 {
-    "nl": {
-        "export_as_csv": "Exporteer als CSV"
-    },
     "en": {
-        "export_as_csv": "Export as CSV"
+        "export_as_excel": "Export as Excel"
+    },
+    "nl": {
+        "export_as_excel": "Exporteer als Excel"
     }
 }
