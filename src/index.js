@@ -64,11 +64,20 @@ export default function ({ router, addReadyListener, api, i18n: { translate: __,
                     exportLink = menu.lastElementChild;
                     exportLink.addEventListener('click', () => {
                         getGroupCategory(groupCategoryId).then(groupCategory => {
-                            var data = [generateGroupCategoryCSV(groupCategory)];
-                            var fileName = encodeURIComponent(`${groupCategory.name}.csv`);
-                            var file = new File(data, fileName, { type: 'text/csv' });
+                            var workBook = xlsx.utils.book_new();
+                            var fileName = `${groupCategory.name}.xlsx`;
 
-                            downloadFile(file, fileName);
+                            for (let group of groupCategory.groups) {
+                                let data = group.users.map(user => [user.name]);
+                                let workSheet = xlsx.utils.aoa_to_sheet(data);
+                                let sheetName = group.name;
+
+                                // Add worksheet to workbook
+                                xlsx.utils.book_append_sheet(workBook, workSheet, sheetName);
+                            }
+
+                            // Write workbook to file
+                            xlsx.writeFile(workBook, fileName);
                         });
                     });
                 }
