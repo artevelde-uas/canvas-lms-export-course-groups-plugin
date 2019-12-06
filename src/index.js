@@ -17,12 +17,12 @@ export default function ({ router, addReadyListener, api, i18n: { translate: __,
         // Fetch the group category and its groups
         var [groupCategory, groups] = await Promise.all([
             api.get(`/group_categories/${groupCategoryId}`),
-            api.get(`/group_categories/${groupCategoryId}/groups`)
+            api.get(`/group_categories/${groupCategoryId}/groups`, { per_page: 100 })
         ]);
 
         // Fetch the users from all the groups
         groupCategory.groups = await Promise.all(groups.map(async group => {
-            group.users = await api.get(`/groups/${group.id}/users`);
+            group.users = await api.get(`/groups/${group.id}/users`, { per_page: 100 });
 
             return group;
         }));
