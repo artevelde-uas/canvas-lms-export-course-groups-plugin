@@ -4,7 +4,15 @@ import { utils as WorkbookUtils } from 'xlsx';
 import translations from './i18n.json';
 
 
-export default function ({ router, addReadyListener, api, i18n: { translate: __, setTranslations } }) {
+export default function ({
+    router,
+    addReadyListener,
+    api,
+    i18n: {
+        translate: __,
+        setTranslations
+    }
+}) {
     setTranslations(translations);
 
     /**
