@@ -74,8 +74,7 @@ export default function ({
 
                             // Add a worksheet for each group and add the users
                             for (let group of groupCategory.groups) {
-                                let data = group.users.map(user => [user.name]);
-                                let workSheet = WorkbookUtils.aoa_to_sheet(data);
+                                let workSheet = WorkbookUtils.json_to_sheet(group.users);
                                 let sheetName = group.name;
 
                                 // Add the worksheet to the workbook
