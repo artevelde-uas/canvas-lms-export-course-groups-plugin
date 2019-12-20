@@ -12,6 +12,15 @@ export default function ({
         translate: __,
         setTranslations
     }
+}, {
+    userHeader = ['id', 'name', 'short_name', 'sortable_name', 'login_id'],
+    userMapper = user => {
+        for (let key of Object.keys(user)) {
+            if (!userHeader.includes(key)) delete user[key];
+        }
+
+        return user;
+    }
 }) {
     setTranslations(translations);
 
@@ -71,14 +80,6 @@ export default function ({
                             // Create a new workbook
                             var workBook = WorkbookUtils.book_new();
                             var fileName = `${groupCategory.name}.xlsx`;
-                            var userHeader = ['id', 'name', 'short_name', 'sortable_name', 'login_id'];
-                            var userMapper = user => {
-                                for (let key of Object.keys(user)) {
-                                    if (!userHeader.includes(key)) delete user[key];
-                                }
-
-                                return user;
-                            };
 
                             // Add a worksheet for each group and add the users
                             for (let group of groupCategory.groups) {
