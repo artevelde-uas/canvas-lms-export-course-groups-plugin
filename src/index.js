@@ -71,10 +71,10 @@ export default function ({
                             // Create a new workbook
                             var workBook = WorkbookUtils.book_new();
                             var fileName = `${groupCategory.name}.xlsx`;
-                            var headers = ['id', 'name', 'short_name', 'sortable_name', 'login_id'];
+                            var userHeader = ['id', 'name', 'short_name', 'sortable_name', 'login_id'];
                             var userMapper = user => {
                                 for (let key of Object.keys(user)) {
-                                    if (!headers.includes(key)) delete user[key];
+                                    if (!userHeader.includes(key)) delete user[key];
                                 }
 
                                 return user;
@@ -83,7 +83,7 @@ export default function ({
                             // Add a worksheet for each group and add the users
                             for (let group of groupCategory.groups) {
                                 let data = group.users.map(userMapper);
-                                let workSheet = WorkbookUtils.json_to_sheet(data);
+                                let workSheet = WorkbookUtils.json_to_sheet(data, { header: userHeader });
                                 let sheetName = group.name;
 
                                 // Add the worksheet to the workbook
