@@ -78,7 +78,7 @@ export default function ({
                     exportLink.addEventListener('click', () => {
                         getGroupCategory(groupCategoryId).then(groupCategory => {
                             // Create a new workbook
-                            var workBook = WorkbookUtils.book_new();
+                            var workbook = WorkbookUtils.book_new();
                             var fileName = `${groupCategory.name}.xlsx`;
 
                             // Add a worksheet for each group and add the users
@@ -88,11 +88,11 @@ export default function ({
                                 let sheetName = group.name;
 
                                 // Add the worksheet to the workbook
-                                WorkbookUtils.book_append_sheet(workBook, workSheet, sheetName);
+                                WorkbookUtils.book_append_sheet(workbook, workSheet, sheetName);
                             }
 
                             // Write the workbook to a file and download it
-                            writeWorkbookToFile(workBook, fileName);
+                            writeWorkbookToFile(workbook, fileName);
                         });
                     });
                 }
