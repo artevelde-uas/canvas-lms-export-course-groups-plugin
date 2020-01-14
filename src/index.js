@@ -80,16 +80,26 @@ export default function ({
                             // Create a new workbook
                             var workbook = WorkbookUtils.book_new();
                             var fileName = `${groupCategory.name}.xlsx`;
+                            var overviewData = [];
+                            var overviewWorksheet = WorkbookUtils.aoa_to_sheet([[...userHeader, __('group_name')]]);
+
+                            // Add the overview sheet to the workbook
+                            WorkbookUtils.book_append_sheet(workbook, overviewWorksheet, __('overview'));
 
                             // Add a worksheet for each group and add the users
                             for (let group of groupCategory.groups) {
-                                let data = group.users.map(userMapper);
-                                let workSheet = WorkbookUtils.json_to_sheet(data, { header: userHeader });
-                                let sheetName = group.name;
+                                let groupData = group.users.map(userMapper);
+                                let groupWorksheet = WorkbookUtils.json_to_sheet(groupData, { header: userHeader });
 
                                 // Add the worksheet to the workbook
-                                WorkbookUtils.book_append_sheet(workbook, workSheet, sheetName);
+                                WorkbookUtils.book_append_sheet(workbook, groupWorksheet, group.name);
+
+                                // Add the group data to the overview
+                                overviewData = overviewData.concat(groupData.map(user => (user[__('group_name')] = group.name, user)));
                             }
+
+                            // Add the users to the overview page
+                            WorkbookUtils.sheet_add_json(overviewWorksheet, overviewData, { skipHeader: true, origin: 1 });
 
                             // Write the workbook to a file and download it
                             writeWorkbookToFile(workbook, fileName);
