@@ -3,7 +3,7 @@ export function normalizeWorksheetName(name) {
     name = name.replace(/[\\\/\?\*\[\]]/g, '_');
 
     // Limit name to 31 characters
-    name = name.replace(/^(.{28}).{4,}/, '$1...');
+    name = name.replace(/^(.{30}).{2,}/, '$1…');
 
     return name;
 }
