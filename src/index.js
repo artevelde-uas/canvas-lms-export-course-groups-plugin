@@ -1,5 +1,6 @@
 import { writeFile as writeWorkbookToFile } from 'xlsx';
 import { utils as WorkbookUtils } from 'xlsx';
+import { normalizeWorksheetName } from './util.js';
 
 import translations from './i18n.json';
 
@@ -88,11 +89,12 @@ export default function ({
 
                             // Add a worksheet for each group and add the users
                             for (let group of groupCategory.groups) {
+                                let groupName = normalizeWorksheetName(group.name);
                                 let groupData = group.users.map(userMapper);
                                 let groupWorksheet = WorkbookUtils.json_to_sheet(groupData, { header: userHeader });
 
                                 // Add the worksheet to the workbook
-                                WorkbookUtils.book_append_sheet(workbook, groupWorksheet, group.name);
+                                WorkbookUtils.book_append_sheet(workbook, groupWorksheet, groupName);
 
                                 // Add the group data to the overview
                                 overviewData = overviewData.concat(groupData.map(user => (user[__('group_name')] = group.name, user)));
