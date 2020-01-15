@@ -1,6 +1,12 @@
 export function normalizeWorksheetName(name) {
-    // Strip forbidden characters
-    name = name.replace(/[\\\/\?\*\[\]]+/g, '_');
+    // Replace square brackets with normal ones
+    name = name.replace(/\[/g, '(').replace(/\]/g, ')');
+
+    // Replace slashes with dashes
+    name = name.replace(/\//g, '-');
+
+    // Replace other forbidden characters with underscores
+    name = name.replace(/[\\\?\*]+/g, '_');
 
     // Limit name to 31 characters
     name = name.replace(/^(.{30}).{2,}/, '$1…');
