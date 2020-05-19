@@ -5,15 +5,7 @@ import { normalizeWorksheetName } from './util.js';
 import translations from './i18n.json';
 
 
-export default function ({
-    router,
-    addReadyListener,
-    api,
-    i18n: {
-        translate: __,
-        setTranslations
-    }
-}, {
+export default function ({ router, dom, api, i18n, i18n: { translate: __ } }, {
     userHeader = ['id', 'name', 'short_name', 'sortable_name', 'login_id'],
     userMapper = user => {
         for (let key of Object.keys(user)) {
@@ -22,8 +14,8 @@ export default function ({
 
         return user;
     }
-}) {
-    setTranslations(translations);
+} = {}) {
+    i18n.setTranslations(translations);
 
     /**
      * Gets the group category with nested groups and users
@@ -48,9 +40,8 @@ export default function ({
         return groupCategory;
     }
 
-    router.addListener('courses.users.groups', function () {
-        addReadyListener('#group_categories_tabs', tabs => {
-
+    router.onRoute('courses.users.groups', async function () {
+        dom.onElementReady('#group_categories_tabs').then(tabs => {
             // Handle clicks on the actions button
             tabs.addEventListener('mousedown', event => {
                 var button = event.target.closest('.group-category-actions a.al-trigger');
