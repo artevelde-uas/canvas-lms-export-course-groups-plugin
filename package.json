@@ -13,7 +13,7 @@
     "src/"
   ],
   "peerDependencies": {
-    "@ahsdile/canvas-lms-app": "^0.24.0"
+    "@artevelde-uas/canvas-lms-app": "^0.32.0"
   },
   "dependencies": {
     "xlsx": "^0.15.3"
