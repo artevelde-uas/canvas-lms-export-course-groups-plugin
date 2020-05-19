@@ -7,6 +7,8 @@
 Plugin for the [Canvas LMS theme app](https://github.com/artevelde-uas/canvas-lms-app) that adds a menu item to export
 course groups as Excel.
 
+![Example image](docs/example.png)
+
 ## Installation
 
 Using NPM:
