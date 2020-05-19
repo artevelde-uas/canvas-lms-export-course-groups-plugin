@@ -41,66 +41,65 @@ export default function ({ router, dom, api, i18n, i18n: { translate: __ } }, {
     }
 
     router.onRoute('courses.users.groups', async function () {
-        dom.onElementReady('#group_categories_tabs').then(tabs => {
-            // Handle clicks on the actions button
-            tabs.addEventListener('mousedown', event => {
-                var button = event.target.closest('.group-category-actions a.al-trigger');
+        let tabs = await dom.onElementReady('#group_categories_tabs');
 
-                if (button === null) return;
+        // Handle clicks on the actions button
+        tabs.addEventListener('mousedown', event => {
+            var button = event.target.closest('.group-category-actions a.al-trigger');
 
-                let menu = button.nextElementSibling;
-                let exportLink = menu.querySelector('a.export-category');
+            if (button === null) return;
 
-                if (exportLink === null) {
-                    // Append the menu item to the actions menu
-                    menu.insertAdjacentHTML('beforeend', `
-                        <li class="ui-menu-item" role="presentation">
-                            <a href="#" class="icon-export export-category ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
-                                ${__('export_as_excel')}
-                            </a>
-                        </li>
-                    `);
+            let menu = button.nextElementSibling;
+            let exportLink = menu.querySelector('a.export-category');
 
-                    // Get the active tab's group category ID
-                    let tabAnchor = tabs.querySelector('ul.ui-tabs-nav > li.ui-tabs-active > a.ui-tabs-anchor.group-category-tab-link');
-                    let groupCategoryId = tabAnchor.href.match(/tab-(\d+)$/)[1];
+            if (exportLink === null) {
+                // Append the menu item to the actions menu
+                menu.insertAdjacentHTML('beforeend', `
+                    <li class="ui-menu-item" role="presentation">
+                        <a href="#" class="icon-export export-category ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+                            ${__('export_as_excel')}
+                        </a>
+                    </li>
+                `);
 
-                    // Add a click handler to the new menu item
-                    exportLink = menu.lastElementChild;
-                    exportLink.addEventListener('click', () => {
-                        getGroupCategory(groupCategoryId).then(groupCategory => {
-                            // Create a new workbook
-                            var workbook = WorkbookUtils.book_new();
-                            var fileName = `${groupCategory.name}.xlsx`;
-                            var overviewData = [];
-                            var overviewWorksheet = WorkbookUtils.aoa_to_sheet([[...userHeader, __('group_name')]]);
+                // Get the active tab's group category ID
+                let tabAnchor = tabs.querySelector('ul.ui-tabs-nav > li.ui-tabs-active > a.ui-tabs-anchor.group-category-tab-link');
+                let groupCategoryId = tabAnchor.href.match(/tab-(\d+)$/)[1];
 
-                            // Add the overview sheet to the workbook
-                            WorkbookUtils.book_append_sheet(workbook, overviewWorksheet, __('overview'));
+                // Add a click handler to the new menu item
+                exportLink = menu.lastElementChild;
+                exportLink.addEventListener('click', async () => {
+                    let groupCategory = await getGroupCategory(groupCategoryId);
 
-                            // Add a worksheet for each group and add the users
-                            for (let group of groupCategory.groups) {
-                                let groupName = normalizeWorksheetName(group.name);
-                                let groupData = group.users.map(userMapper);
-                                let groupWorksheet = WorkbookUtils.json_to_sheet(groupData, { header: userHeader });
+                    // Create a new workbook
+                    var workbook = WorkbookUtils.book_new();
+                    var fileName = `${groupCategory.name}.xlsx`;
+                    var overviewData = [];
+                    var overviewWorksheet = WorkbookUtils.aoa_to_sheet([[...userHeader, __('group_name')]]);
 
-                                // Add the worksheet to the workbook
-                                WorkbookUtils.book_append_sheet(workbook, groupWorksheet, groupName);
+                    // Add the overview sheet to the workbook
+                    WorkbookUtils.book_append_sheet(workbook, overviewWorksheet, __('overview'));
 
-                                // Add the group data to the overview
-                                overviewData = overviewData.concat(groupData.map(user => (user[__('group_name')] = group.name, user)));
-                            }
+                    // Add a worksheet for each group and add the users
+                    for (let group of groupCategory.groups) {
+                        let groupName = normalizeWorksheetName(group.name);
+                        let groupData = group.users.map(userMapper);
+                        let groupWorksheet = WorkbookUtils.json_to_sheet(groupData, { header: userHeader });
 
-                            // Add the users to the overview page
-                            WorkbookUtils.sheet_add_json(overviewWorksheet, overviewData, { skipHeader: true, origin: 1 });
+                        // Add the worksheet to the workbook
+                        WorkbookUtils.book_append_sheet(workbook, groupWorksheet, groupName);
 
-                            // Write the workbook to a file and download it
-                            writeWorkbookToFile(workbook, fileName);
-                        });
-                    });
-                }
-            });
+                        // Add the group data to the overview
+                        overviewData = overviewData.concat(groupData.map(user => (user[__('group_name')] = group.name, user)));
+                    }
 
+                    // Add the users to the overview page
+                    WorkbookUtils.sheet_add_json(overviewWorksheet, overviewData, { skipHeader: true, origin: 1 });
+
+                    // Write the workbook to a file and download it
+                    writeWorkbookToFile(workbook, fileName);
+                });
+            }
         });
     });
 
