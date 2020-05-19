@@ -25,7 +25,7 @@ export default function ({ router, dom, api, i18n, i18n: { translate: __ } }, {
      */
     async function getGroupCategory(groupCategoryId) {
         // Fetch the group category and its groups
-        var [groupCategory, groups] = await Promise.all([
+        let [groupCategory, groups] = await Promise.all([
             api.get(`/group_categories/${groupCategoryId}`),
             api.get(`/group_categories/${groupCategoryId}/groups`, { per_page: 100 })
         ]);
@@ -45,7 +45,7 @@ export default function ({ router, dom, api, i18n, i18n: { translate: __ } }, {
 
         // Handle clicks on the actions button
         tabs.addEventListener('mousedown', event => {
-            var button = event.target.closest('.group-category-actions a.al-trigger');
+            let button = event.target.closest('.group-category-actions a.al-trigger');
 
             if (button === null) return;
 
@@ -72,10 +72,10 @@ export default function ({ router, dom, api, i18n, i18n: { translate: __ } }, {
                     let groupCategory = await getGroupCategory(groupCategoryId);
 
                     // Create a new workbook
-                    var workbook = WorkbookUtils.book_new();
-                    var fileName = `${groupCategory.name}.xlsx`;
-                    var overviewData = [];
-                    var overviewWorksheet = WorkbookUtils.aoa_to_sheet([[...userHeader, __('group_name')]]);
+                    let workbook = WorkbookUtils.book_new();
+                    let fileName = `${groupCategory.name}.xlsx`;
+                    let overviewData = [];
+                    let overviewWorksheet = WorkbookUtils.aoa_to_sheet([[...userHeader, __('group_name')]]);
 
                     // Add the overview sheet to the workbook
                     WorkbookUtils.book_append_sheet(workbook, overviewWorksheet, __('overview'));
