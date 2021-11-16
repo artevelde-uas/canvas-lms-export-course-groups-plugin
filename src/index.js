@@ -1,11 +1,12 @@
+import { router, dom, api } from '@artevelde-uas/canvas-lms-app';
 import { writeFile as writeWorkbookToFile } from 'xlsx';
 import { utils as WorkbookUtils } from 'xlsx';
 import { normalizeWorksheetName } from './util.js';
 
-import translations from './i18n.json';
+import __ from './i18n';
 
 
-export default function ({ router, dom, api, i18n, i18n: { translate: __ } }, {
+export default function ({
     userHeader = ['id', 'name', 'short_name', 'sortable_name', 'login_id'],
     userMapper = user => {
         for (let key of Object.keys(user)) {
@@ -15,8 +16,6 @@ export default function ({ router, dom, api, i18n, i18n: { translate: __ } }, {
         return user;
     }
 } = {}) {
-    i18n.setTranslations(translations);
-
     /**
      * Gets the group category with nested groups and users
      *
@@ -103,4 +102,9 @@ export default function ({ router, dom, api, i18n, i18n: { translate: __ } }, {
         });
     });
 
+    return {
+        ...require('../package.json'),
+        title: __('package.title'),
+        description: __('package.description')
+    };
 }

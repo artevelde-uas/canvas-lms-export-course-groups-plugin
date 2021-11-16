@@ -1,0 +1,9 @@
+{
+    "export_as_excel": "Exporteer als Excel",
+    "overview": "Overzicht",
+    "group_name": "Groepsnaam",
+    "package": {
+        "title": "Excel export voor cursusgroepen inschakelen",
+        "description": "Schakelt Excel export in voor cursusgroepen."
+    }
+}
