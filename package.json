@@ -16,6 +16,6 @@
     "@artevelde-uas/canvas-lms-app": "^0.32.0"
   },
   "dependencies": {
-    "xlsx": "^0.15.3"
+    "xlsx": "^0.17.4"
   }
 }
