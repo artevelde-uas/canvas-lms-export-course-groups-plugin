@@ -24,10 +24,10 @@ Using Yarn:
 Just import the plug-in and add it to the Canvas app:
 
 ```javascript
-import canvas from '@artevelde-uas/canvas-lms-app';
+import { run, addPlugin } from '@artevelde-uas/canvas-lms-app';
 import exportCourseGroupsPlugin from '@artevelde-uas/canvas-lms-export-course-groups-plugin';
 
-canvas.addPlugin(exportCourseGroupsPlugin);
+addPlugin(exportCourseGroupsPlugin);
 
-canvas.run();
+run();
 ```
