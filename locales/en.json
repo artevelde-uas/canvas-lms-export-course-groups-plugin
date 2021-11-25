@@ -1,0 +1,9 @@
+{
+    "export_as_excel": "Export as Excel",
+    "overview": "Overview",
+    "group_name": "Group name",
+    "package": {
+        "title": "Enable course group Excel export",
+        "description": "Adds a menu item to export course groups as Excel."
+    }
+}
