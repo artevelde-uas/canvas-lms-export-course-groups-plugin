@@ -10,7 +10,9 @@
   "repository": "https://github.com/artevelde-uas/canvas-lms-export-course-groups-plugin",
   "module": "src/index.js",
   "files": [
-    "src/"
+    "src/",
+    "locales/",
+    "docs/"
   ],
   "peerDependencies": {
     "@artevelde-uas/canvas-lms-app": "^1.0.0"
