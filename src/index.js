@@ -51,54 +51,54 @@ export default function ({
             const menu = button.nextElementSibling;
             let exportLink = menu.querySelector('a.export-category');
 
-            if (exportLink === null) {
-                // Append the menu item to the actions menu
-                menu.insertAdjacentHTML('beforeend', `
-                    <li class="ui-menu-item" role="presentation">
-                        <a href="#" class="icon-export export-category ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
-                            ${__('export_as_excel')}
-                        </a>
-                    </li>
-                `);
+            if (exportLink !== null) return;
 
-                // Get the active tab's group category ID
-                const tabAnchor = tabs.querySelector('ul.ui-tabs-nav > li.ui-tabs-active > a.ui-tabs-anchor.group-category-tab-link');
-                const groupCategoryId = tabAnchor.href.match(/tab-(\d+)$/)[1];
+            // Append the menu item to the actions menu
+            menu.insertAdjacentHTML('beforeend', `
+                <li class="ui-menu-item" role="presentation">
+                    <a href="#" class="icon-export export-category ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+                        ${__('export_as_excel')}
+                    </a>
+                </li>
+            `);
 
-                // Add a click handler to the new menu item
-                exportLink = menu.lastElementChild;
-                exportLink.addEventListener('click', async () => {
-                    const groupCategory = await getGroupCategory(groupCategoryId);
+            // Get the active tab's group category ID
+            const tabAnchor = tabs.querySelector('ul.ui-tabs-nav > li.ui-tabs-active > a.ui-tabs-anchor.group-category-tab-link');
+            const groupCategoryId = tabAnchor.href.match(/tab-(\d+)$/)[1];
 
-                    // Create a new workbook
-                    const workbook = WorkbookUtils.book_new();
-                    const fileName = `${groupCategory.name}.xlsx`;
-                    const overviewWorksheet = WorkbookUtils.aoa_to_sheet([[...userHeader, __('group_name')]]);
-                    let overviewData = [];
+            // Add a click handler to the new menu item
+            exportLink = menu.lastElementChild;
+            exportLink.addEventListener('click', async () => {
+                const groupCategory = await getGroupCategory(groupCategoryId);
 
-                    // Add the overview sheet to the workbook
-                    WorkbookUtils.book_append_sheet(workbook, overviewWorksheet, __('overview'));
+                // Create a new workbook
+                const workbook = WorkbookUtils.book_new();
+                const fileName = `${groupCategory.name}.xlsx`;
+                const overviewWorksheet = WorkbookUtils.aoa_to_sheet([[...userHeader, __('group_name')]]);
+                let overviewData = [];
 
-                    // Add a worksheet for each group and add the users
-                    for (const group of groupCategory.groups) {
-                        const groupName = normalizeWorksheetName(group.name);
-                        const groupData = group.users.map(userMapper);
-                        const groupWorksheet = WorkbookUtils.json_to_sheet(groupData, { header: userHeader });
+                // Add the overview sheet to the workbook
+                WorkbookUtils.book_append_sheet(workbook, overviewWorksheet, __('overview'));
 
-                        // Add the worksheet to the workbook
-                        WorkbookUtils.book_append_sheet(workbook, groupWorksheet, groupName);
+                // Add a worksheet for each group and add the users
+                for (const group of groupCategory.groups) {
+                    const groupName = normalizeWorksheetName(group.name);
+                    const groupData = group.users.map(userMapper);
+                    const groupWorksheet = WorkbookUtils.json_to_sheet(groupData, { header: userHeader });
 
-                        // Add the group data to the overview
-                        overviewData = overviewData.concat(groupData.map(user => (user[__('group_name')] = group.name, user)));
-                    }
+                    // Add the worksheet to the workbook
+                    WorkbookUtils.book_append_sheet(workbook, groupWorksheet, groupName);
 
-                    // Add the users to the overview page
-                    WorkbookUtils.sheet_add_json(overviewWorksheet, overviewData, { skipHeader: true, origin: 1 });
+                    // Add the group data to the overview
+                    overviewData = overviewData.concat(groupData.map(user => (user[__('group_name')] = group.name, user)));
+                }
 
-                    // Write the workbook to a file and download it
-                    writeWorkbookToFile(workbook, fileName);
-                });
-            }
+                // Add the users to the overview page
+                WorkbookUtils.sheet_add_json(overviewWorksheet, overviewData, { skipHeader: true, origin: 1 });
+
+                // Write the workbook to a file and download it
+                writeWorkbookToFile(workbook, fileName);
+            });
         });
     });
 
