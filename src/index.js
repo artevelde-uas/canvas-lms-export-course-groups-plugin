@@ -9,7 +9,7 @@ import __ from './i18n';
 export default function ({
     userHeader = ['id', 'name', 'short_name', 'sortable_name', 'login_id'],
     userMapper = user => {
-        for (let key of Object.keys(user)) {
+        for (const key of Object.keys(user)) {
             if (!userHeader.includes(key)) delete user[key];
         }
 
@@ -24,7 +24,7 @@ export default function ({
      */
     async function getGroupCategory(groupCategoryId) {
         // Fetch the group category and its groups
-        let [groupCategory, groups] = await Promise.all([
+        const [groupCategory, groups] = await Promise.all([
             api.get(`/group_categories/${groupCategoryId}`),
             api.get(`/group_categories/${groupCategoryId}/groups`, { per_page: 100 })
         ]);
@@ -40,15 +40,15 @@ export default function ({
     }
 
     router.onRoute('courses.users.groups', async function () {
-        let tabs = await dom.onElementReady('#group_categories_tabs');
+        const tabs = await dom.onElementReady('#group_categories_tabs');
 
         // Handle clicks on the actions button
         tabs.addEventListener('mousedown', event => {
-            let button = event.target.closest('.group-category-actions a.al-trigger');
+            const button = event.target.closest('.group-category-actions a.al-trigger');
 
             if (button === null) return;
 
-            let menu = button.nextElementSibling;
+            const menu = button.nextElementSibling;
             let exportLink = menu.querySelector('a.export-category');
 
             if (exportLink === null) {
@@ -62,28 +62,28 @@ export default function ({
                 `);
 
                 // Get the active tab's group category ID
-                let tabAnchor = tabs.querySelector('ul.ui-tabs-nav > li.ui-tabs-active > a.ui-tabs-anchor.group-category-tab-link');
-                let groupCategoryId = tabAnchor.href.match(/tab-(\d+)$/)[1];
+                const tabAnchor = tabs.querySelector('ul.ui-tabs-nav > li.ui-tabs-active > a.ui-tabs-anchor.group-category-tab-link');
+                const groupCategoryId = tabAnchor.href.match(/tab-(\d+)$/)[1];
 
                 // Add a click handler to the new menu item
                 exportLink = menu.lastElementChild;
                 exportLink.addEventListener('click', async () => {
-                    let groupCategory = await getGroupCategory(groupCategoryId);
+                    const groupCategory = await getGroupCategory(groupCategoryId);
 
                     // Create a new workbook
-                    let workbook = WorkbookUtils.book_new();
-                    let fileName = `${groupCategory.name}.xlsx`;
+                    const workbook = WorkbookUtils.book_new();
+                    const fileName = `${groupCategory.name}.xlsx`;
+                    const overviewWorksheet = WorkbookUtils.aoa_to_sheet([[...userHeader, __('group_name')]]);
                     let overviewData = [];
-                    let overviewWorksheet = WorkbookUtils.aoa_to_sheet([[...userHeader, __('group_name')]]);
 
                     // Add the overview sheet to the workbook
                     WorkbookUtils.book_append_sheet(workbook, overviewWorksheet, __('overview'));
 
                     // Add a worksheet for each group and add the users
-                    for (let group of groupCategory.groups) {
-                        let groupName = normalizeWorksheetName(group.name);
-                        let groupData = group.users.map(userMapper);
-                        let groupWorksheet = WorkbookUtils.json_to_sheet(groupData, { header: userHeader });
+                    for (const group of groupCategory.groups) {
+                        const groupName = normalizeWorksheetName(group.name);
+                        const groupData = group.users.map(userMapper);
+                        const groupWorksheet = WorkbookUtils.json_to_sheet(groupData, { header: userHeader });
 
                         // Add the worksheet to the workbook
                         WorkbookUtils.book_append_sheet(workbook, groupWorksheet, groupName);
