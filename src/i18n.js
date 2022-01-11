@@ -1,14 +1,6 @@
 import { addTranslations, getTranslator } from '@artevelde-uas/canvas-lms-app/services/i18n';
 
-
-// Create a context with all the [lang].json file in the 'locale' directory
-const context = require.context('../locales', false, /\.json$/);
-
-// Build the translations object
-const translations = Object.fromEntries(context.keys().map(key => [
-    key.replace(/^\.\/(.+)\.json$/, '$1'),
-    context(key)
-]));
+import translations from './locales.json';
 
 // Get the namespace from the package
 const namespace = require('../package.json').name;

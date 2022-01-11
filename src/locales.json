@@ -1,0 +1,20 @@
+{
+    "en": {
+        "export_as_excel": "Export as Excel",
+        "overview": "Overview",
+        "group_name": "Group name",
+        "package": {
+            "title": "Excel export for course groups",
+            "description": "Adds a menu item to export course groups as Excel."
+        }
+    },
+    "nl": {
+        "export_as_excel": "Exporteer als Excel",
+        "overview": "Overzicht",
+        "group_name": "Groepsnaam",
+        "package": {
+            "title": "Excel export voor cursusgroepen",
+            "description": "Voegt een menu-optie toe om cursusgroepen te exporteren als Excel."
+        }
+    }
+}
