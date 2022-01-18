@@ -19,5 +19,13 @@
   },
   "dependencies": {
     "xlsx": "^0.17.4"
+  },
+  "config": {
+    "scope": {
+      "course": true
+    },
+    "roles": {
+      "teacher": true
+    }
   }
 }
