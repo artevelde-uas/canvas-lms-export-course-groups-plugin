@@ -1,4 +1,4 @@
-import { router, dom, api } from '@artevelde-uas/canvas-lms-app';
+import { router, dom, api, messages } from '@artevelde-uas/canvas-lms-app';
 import { writeFile as writeWorkbookToFile } from 'xlsx';
 import { utils as WorkbookUtils } from 'xlsx';
 import { normalizeWorksheetName } from './util.js';
@@ -71,33 +71,37 @@ export default function ({
             exportLink.addEventListener('click', async () => {
                 const groupCategory = await getGroupCategory(groupCategoryId);
 
-                // Create a new workbook
-                const workbook = WorkbookUtils.book_new();
-                const fileName = `${groupCategory.name}.xlsx`;
-                const overviewWorksheet = WorkbookUtils.aoa_to_sheet([[...userHeader, __('group_name')]]);
-                let overviewData = [];
+                try {
+                    // Create a new workbook
+                    const workbook = WorkbookUtils.book_new();
+                    const fileName = `${groupCategory.name}.xlsx`;
+                    const overviewWorksheet = WorkbookUtils.aoa_to_sheet([[...userHeader, __('group_name')]]);
+                    let overviewData = [];
 
-                // Add the overview sheet to the workbook
-                WorkbookUtils.book_append_sheet(workbook, overviewWorksheet, __('overview'));
+                    // Add the overview sheet to the workbook
+                    WorkbookUtils.book_append_sheet(workbook, overviewWorksheet, __('overview'));
 
-                // Add a worksheet for each group and add the users
-                for (const group of groupCategory.groups) {
-                    const groupName = normalizeWorksheetName(group.name);
-                    const groupData = group.users.map(userMapper);
-                    const groupWorksheet = WorkbookUtils.json_to_sheet(groupData, { header: userHeader });
+                    // Add a worksheet for each group and add the users
+                    for (const group of groupCategory.groups) {
+                        const groupName = normalizeWorksheetName(group.name);
+                        const groupData = group.users.map(userMapper);
+                        const groupWorksheet = WorkbookUtils.json_to_sheet(groupData, { header: userHeader });
 
-                    // Add the worksheet to the workbook
-                    WorkbookUtils.book_append_sheet(workbook, groupWorksheet, groupName);
+                        // Add the worksheet to the workbook
+                        WorkbookUtils.book_append_sheet(workbook, groupWorksheet, groupName);
 
-                    // Add the group data to the overview
-                    overviewData = overviewData.concat(groupData.map(user => (user[__('group_name')] = group.name, user)));
+                        // Add the group data to the overview
+                        overviewData = overviewData.concat(groupData.map(user => (user[__('group_name')] = group.name, user)));
+                    }
+
+                    // Add the users to the overview page
+                    WorkbookUtils.sheet_add_json(overviewWorksheet, overviewData, { skipHeader: true, origin: 1 });
+
+                    // Write the workbook to a file and download it
+                    writeWorkbookToFile(workbook, fileName);
+                } catch (err) {
+                    messages.addFlashMessage(err.message, { type: 'error' });
                 }
-
-                // Add the users to the overview page
-                WorkbookUtils.sheet_add_json(overviewWorksheet, overviewData, { skipHeader: true, origin: 1 });
-
-                // Write the workbook to a file and download it
-                writeWorkbookToFile(workbook, fileName);
             });
         });
     });
