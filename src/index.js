@@ -1,7 +1,7 @@
 import { router, dom, api, messages } from '@artevelde-uas/canvas-lms-app';
 import { writeFile as writeWorkbookToFile } from 'xlsx';
 import { utils as WorkbookUtils } from 'xlsx';
-import { normalizeWorksheetName } from './util.js';
+import { getNormalizedWorksheetNames, keyValueArraysToMap } from './util.js';
 
 import __ from './i18n';
 
@@ -70,7 +70,10 @@ export default function ({
             exportLink = menu.lastElementChild;
             exportLink.addEventListener('click', async () => {
                 const groupCategory = await getGroupCategory(groupCategoryId);
-
+                const groupNames = groupCategory.groups.map(group => group.name);
+                const normalizedGroupNames = getNormalizedWorksheetNames(groupNames);
+                const groupNamesMap = keyValueArraysToMap(groupCategory.groups, normalizedGroupNames);
+                
                 try {
                     // Create a new workbook
                     const workbook = WorkbookUtils.book_new();
@@ -83,7 +86,7 @@ export default function ({
 
                     // Add a worksheet for each group and add the users
                     for (const group of groupCategory.groups) {
-                        const groupName = normalizeWorksheetName(group.name);
+                        const groupName = groupNamesMap.get(group);
                         const groupData = group.users.map(userMapper);
                         const groupWorksheet = WorkbookUtils.json_to_sheet(groupData, { header: userHeader });
 
