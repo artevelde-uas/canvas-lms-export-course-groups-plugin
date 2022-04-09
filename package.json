@@ -1,6 +1,6 @@
 {
   "name": "@artevelde-uas/canvas-lms-export-course-groups-plugin",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Add a menu item to export course groups as Excel",
   "keywords": [
     "Canvas LMS"
