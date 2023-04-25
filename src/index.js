@@ -3,7 +3,7 @@ import { writeFile as writeWorkbookToFile } from 'xlsx';
 import { utils as WorkbookUtils } from 'xlsx';
 import { getNormalizedWorksheetNames, keyValueArraysToMap } from './util.js';
 
-import __ from './i18n';
+import t from './i18n';
 
 
 export default function ({
@@ -57,7 +57,7 @@ export default function ({
             menu.insertAdjacentHTML('beforeend', `
                 <li class="ui-menu-item" role="presentation">
                     <a href="#" class="icon-export export-category ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
-                        ${__('export_as_excel')}
+                        ${t('export_as_excel')}
                     </a>
                 </li>
             `);
@@ -78,11 +78,11 @@ export default function ({
                     // Create a new workbook
                     const workbook = WorkbookUtils.book_new();
                     const fileName = `${groupCategory.name}.xlsx`;
-                    const overviewWorksheet = WorkbookUtils.aoa_to_sheet([[...userHeader, __('group_name')]]);
+                    const overviewWorksheet = WorkbookUtils.aoa_to_sheet([[...userHeader, t('group_name')]]);
                     let overviewData = [];
 
                     // Add the overview sheet to the workbook
-                    WorkbookUtils.book_append_sheet(workbook, overviewWorksheet, __('overview'));
+                    WorkbookUtils.book_append_sheet(workbook, overviewWorksheet, t('overview'));
 
                     // Add a worksheet for each group and add the users
                     for (const group of groupCategory.groups) {
@@ -94,7 +94,7 @@ export default function ({
                         WorkbookUtils.book_append_sheet(workbook, groupWorksheet, groupName);
 
                         // Add the group data to the overview
-                        overviewData = overviewData.concat(groupData.map(user => (user[__('group_name')] = group.name, user)));
+                        overviewData = overviewData.concat(groupData.map(user => (user[t('group_name')] = group.name, user)));
                     }
 
                     // Add the users to the overview page
@@ -111,7 +111,7 @@ export default function ({
 
     return {
         ...require('../package.json'),
-        title: __('package.title'),
-        description: __('package.description')
+        title: t('package.title'),
+        description: t('package.description')
     };
 }
